@@ -1,11 +1,22 @@
 {
-    "manifest_version": 3,
-    "name": "New Tab",
-    "description": "Pomodoro Timer in every new tab.",
-    "version": "1.0",
-    "permissions": ["tabs"],
-    "chrome_url_overrides": {
-      "newtab": "popup.html"
+  "manifest_version": 2,
+  "name": "New Tab",
+  "description": "Pomodoro Timer in every new tab.",
+  "version": "1.0",
+  "permissions": ["tabs", "activeTab"],
+  "chrome_url_overrides": {
+    "newtab": "popup.html"
+  },
+  "applications": {
+    "gecko": {
+        "strict_min_version": "91.1.0",
+       "id": "borderify@example.com"
     }
-  }
-  
+},
+"content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["popup.js"]
+    }
+  ]
+}
