@@ -1,27 +1,59 @@
-let currentTabId;
-let intervalId;
-console.log("from background");
+let timerState = {
+    running: false,
+    minutes: 0,
+    seconds: 5,
+    isBreak: false,
+}
+let timerInterval;
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    // console.log("from background");
-    if (message.action === 'startFreezing') {
-        currentTabId = sender.tab.id;
-        startFreezingTabs();
-    } else if (message.action === 'stopFreezing') {
-        stopFreezingTabs();
+
+console.log(timerState);
+chrome.runtime.onMessage.addListener((message, sender, sendResponse)=>{
+    if(message.action == "start"){
+        startTimer();
+
+    }else if(message.action === "pause"){
+        pauseTimer();
+        
+    }else if(message.action === "reset"){
+        resetTimer();
+
+    }else if(message.action === "getTimerState"){
+        sendResponse(timerState);
     }
 });
 
-function startFreezingTabs() {
-    // console.log("from background");
-    intervalId = setInterval(() => {
-        chrome.tabs.update(currentTabId, { active: true });
-    }, 100);
-}
 
-function stopFreezingTabs() {
-    // console.log("from background");
-    if (intervalId) {
-        clearInterval(intervalId);
+const startTimer = () => {   
+    console.log(timerState);
+    if (timerState.running) return;
+    timerState.running = true;
+
+    timerInterval = setInterval(() => {
+        if(timerState.seconds === 0){
+            if(timerState.minutes === 0){
+                timerState.running = false;
+                timerState.isBreak = !timerState.isBreak;
+                timerState.minutes = timerState.isBreak ? 1 : 25;
+
+                clearInterval(timerInterval);
+                console.log("exit",timerState);
+                chrome.runtime.sendMessage({action:"timeUp", isBreak: timerState.isBreak});
+            }else{
+                timerState.seconds = 59;
+                timerState.minutes--;
+            }   
+        }else{
+            timerState.seconds--;
+        }
+        chrome.runtime.sendMessage({ action: "update", timerState });
+  }, 1000);
+        
     }
-}
+
+    const pauseTimer = () => {
+        timerState.running = false;
+        clearInterval(timerInterval);
+
+        chrome.runtime.sendMessage({action:"timePaused", isBreak: timerState.isBreak});
+    }

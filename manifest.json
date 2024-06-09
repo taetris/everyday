@@ -3,7 +3,7 @@
   "name": "New Tab",
   "description": "Pomodoro Timer in every new tab.",
   "version": "1.0",
-  "permissions": ["tabs", "activeTab"],
+  "permissions": ["tabs", "activeTab", "storage", "alarms"],
   "chrome_url_overrides": {
     "newtab": "popup.html"
   },
@@ -13,10 +13,15 @@
        "id": "borderify@example.com"
     }
 },
+
 "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
       "js": ["popup.js"]
     }
-  ]
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  }
 }
