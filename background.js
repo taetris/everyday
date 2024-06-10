@@ -1,5 +1,5 @@
 class Timer {
-    constructor(minutes = 25, breakMinutes = 1) {
+    constructor(minutes = 25, breakMinutes = 5) {
         this.state = {
             running: false,
             minutes: minutes,
@@ -14,54 +14,40 @@ class Timer {
     }
 
     startTimer() {
-        console.log(this.state);
+        
         if(this.state.running) return;
         this.state.running = true;
-        if (this.state.isBreak) {
-            this.state.minutes = this.state.breakMinutes;
-            this.state.message = "5min break";
-        }else{
-            this.state.minutes = this.state.workMinutes;
-            this.state.message = "25min session";
-        }
+        this.state.message = this.state.isBreak ? "5min break" : "25min session";
         this.timerInterval = setInterval(() => {
-            const countdown = () => {
-                
-                if (this.state.seconds === 0) {
-                    if (this.state.minutes === 0) {
-                        return true;
-                        
-                    } else {
-                        this.state.seconds = 59;
-                        this.state.minutes--;
-                    }
+            if (this.state.seconds === 0) {
+                if (this.state.minutes === 0) {
+                    
+                    this.timerEnd();
                 } else {
-                    this.state.seconds--;
+                    this.state.seconds = 59;
+                    this.state.minutes--;
                 }
-
-                if(countdown){
-                    this.state.isTimeUp = !this.state.isTimeUp;
-                    this.state.running = false;
-                    this.state.isBreak = !this.state.isBreak;
-
-                    clearInterval(this.timerInterval);
-                    console.log("exit", this.state);
-                    if(this.state.isTimeUp){
-                        this.state.message = "Times up!";
-                        this.state.isTimeUp = !this.state.isTimeUp
-                        chrome.runtime.sendMessage({ action: "timeUp", timerState: this.state });
-                    }
-                }
+            } else {
+                this.state.seconds--;
             }
-
             chrome.runtime.sendMessage({ action: "update", timerState: this.state });
         }, 1000);
+    }
+
+    timerEnd() {
+        this.state.running = false;
+        this.state.isBreak = !this.state.isBreak;
+        this.state.minutes = this.state.isBreak ? this.state.breakMinutes : this.state.workMinutes;
+        this.state.message = "Times up!";
+
+        clearInterval(this.timerInterval);
+        chrome.runtime.sendMessage({ action: "timeUp", timerState: this.state });
     }
 
     pauseTimer() {
         if (!this.state.running) return;
         this.state.running = false;
-        
+        clearInterval(this.timerInterval);
         this.state.message = "Paused";
         chrome.runtime.sendMessage({ action: "timePaused", timerState: this.state });
     }
