@@ -3,7 +3,7 @@ class Timer {
         this.state = {
             running: false,
             minutes: minutes,
-            seconds: 4,
+            seconds: 0,
             isBreak: false,
             breakMinutes: breakMinutes,
             workMinutes: minutes,
@@ -64,7 +64,7 @@ class Timer {
     }
 }
 
-const obj = new Timer(1, 1);
+const obj = new Timer(25, 5);
 console.log("obj")
 chrome.runtime.onMessage.addListener((message, sender, sendResponse)=>{
     if(message.action == "start"){
