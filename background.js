@@ -14,9 +14,12 @@ class Timer {
     }
 
     startTimer() {
-        
+        chrome.runtime.sendMessage({ action: "debug", timerState: "hello" });
         if(this.state.running) return;
         this.state.running = true;
+        chrome.runtime.sendMessage({ action: "debug", timerState: this.state });
+        
+
         this.state.message = this.state.isBreak ? "5min break" : "25min session";
         this.timerInterval = setInterval(() => {
             if (this.state.seconds === 0) {
@@ -53,7 +56,7 @@ class Timer {
     }
 
     resetTimer() {
-        if (!this.state.running) return;
+        
         this.state.running = false;
         clearInterval(this.timerInterval);
         this.state.seconds = 0;
@@ -65,9 +68,9 @@ class Timer {
 }
 
 const obj = new Timer(25, 5);
-console.log("obj")
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse)=>{
-    if(message.action == "start"){
+    if(message.action === "start"){
         
         if(obj.state.running === false){
             obj.startTimer();
@@ -81,3 +84,4 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse)=>{
 
     }
 });
+

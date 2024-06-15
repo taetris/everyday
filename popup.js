@@ -17,6 +17,7 @@ const playSound = () => {
 };
 start.addEventListener('click', () => {
     chrome.runtime.sendMessage({ action: "start" });
+    console.log("start bro")
   });
 
  
@@ -41,16 +42,13 @@ chrome.runtime.onMessage.addListener(async (message) => {
             isPlayingSound = false;
         }
     } else if (message.action === "timePaused") {
-      
+        
     } else if (message.action === "reset") {
         const { minutes, seconds } = message.timerState;
         timerDisplay.innerHTML = minutes.toLocaleString(undefined, { minimumIntegerDigits: 2 }) + ":" + seconds.toLocaleString(undefined, { minimumIntegerDigits: 2 });
-        
-    } else if (message.action === "breaktime") {
-        
-        timerDisplay.innerHTML = "05:00";
-    } else if (message.action === "worktime") {
-        
+
+    }else if(message.action === "debug"){
+        console.log("debug: ", message.timerState)
     }
 });
 
