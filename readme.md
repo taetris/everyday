@@ -16,4 +16,4 @@ After that's done, click on the Extensions icon and enable it.
 
 Read my blog on how I built this:
 
-https://www.notion.so/taetris/How-to-Build-a-Pomodoro-timer-app-extension-without-feeling-like-an-impostor-699ffe56d1e34f33a8f8bcae93a2e052?showMoveTo=true&saveParent=true
+[https://www.notion.so/taetris/How-to-Build-a-Pomodoro-timer-app-extension-without-feeling-like-an-impostor-699ffe56d1e34f33a8f8bcae93a2e052?showMoveTo=true&saveParent=true](https://taetris.notion.site/How-to-Build-a-Pomodoro-timer-app-extension-699ffe56d1e34f33a8f8bcae93a2e052)
