@@ -1,24 +1,23 @@
 class Timer {
-    constructor(minutes = 25, breakMinutes = 5) {
+    constructor(minutes = 22, breakMinutes = 5) {
         this.state = {
             running: false,
+            isBreak: false,
+            isTimeUp: false,
             minutes: minutes,
             seconds: 0,
-            isBreak: false,
+            
             breakMinutes: breakMinutes,
             workMinutes: minutes,
-            isTimeUp: false,
+            
             message: "Start a 25min session",
         };
         this.timerInterval = null;
     }
 
     startTimer() {
-        chrome.runtime.sendMessage({ action: "debug", timerState: "hello" });
-        if(this.state.running) return;
-        this.state.running = true;
-        chrome.runtime.sendMessage({ action: "debug", timerState: this.state });
         
+        this.state.running = true;       
 
         this.state.message = this.state.isBreak ? "5min break" : "25min session";
         this.timerInterval = setInterval(() => {
@@ -44,15 +43,15 @@ class Timer {
         this.state.message = "Times up!";
 
         clearInterval(this.timerInterval);
-        chrome.runtime.sendMessage({ action: "timeUp", timerState: this.state });
+        chrome.runtime.sendMessage({ action: "update", timerState: this.state });
     }
 
     pauseTimer() {
-        if (!this.state.running) return;
+
         this.state.running = false;
         clearInterval(this.timerInterval);
         this.state.message = "Paused";
-        chrome.runtime.sendMessage({ action: "timePaused", timerState: this.state });
+        chrome.runtime.sendMessage({ action: "update", timerState: this.state });
     }
 
     resetTimer() {
@@ -60,10 +59,10 @@ class Timer {
         this.state.running = false;
         clearInterval(this.timerInterval);
         this.state.seconds = 0;
-        this.state.minutes = this.state.workMinutes;
+        this.state.minutes = 24;
         this.state.isBreak = false;
         this.state.message = "Start a 25min session, reset";
-        chrome.runtime.sendMessage({ action: "reset", timerState: this.state });
+        chrome.runtime.sendMessage({ action: "update", timerState: this.state });
     }
 }
 
@@ -77,10 +76,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse)=>{
         }else{
             obj.pauseTimer();
         } 
+        chrome.runtime.sendMessage({ action: "debug", timerState: obj.state})
+
     }   
         
     else if(message.action === "reset"){
+        
         obj.resetTimer();
+        chrome.runtime.sendMessage({ action: "debug", timerState: obj.state})
 
     }
 });

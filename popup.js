@@ -29,26 +29,16 @@ reset.addEventListener('click', () => {
 
 
 
-chrome.runtime.onMessage.addListener(async (message) => {
+chrome.runtime.onMessage.addListener((message) => {
     banner.innerHTML = message.timerState.message;
 
     if (message.action === "update") {
         const { minutes, seconds } = message.timerState;
         timerDisplay.innerHTML = minutes.toLocaleString(undefined, { minimumIntegerDigits: 2 }) + ":" + seconds.toLocaleString(undefined, { minimumIntegerDigits: 2 });
     } else if (message.action === "timeUp") {
-        if (!isPlayingSound) {
-            isPlayingSound = true;
-            await playSound();
-            isPlayingSound = false;
-        }
-    } else if (message.action === "timePaused") {
         
-    } else if (message.action === "reset") {
-        const { minutes, seconds } = message.timerState;
-        timerDisplay.innerHTML = minutes.toLocaleString(undefined, { minimumIntegerDigits: 2 }) + ":" + seconds.toLocaleString(undefined, { minimumIntegerDigits: 2 });
-
     }else if(message.action === "debug"){
-        console.log("debug: ", message.timerState)
+        console.log("debug: ", message.timerState.running)
     }
 });
 

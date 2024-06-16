@@ -7,12 +7,7 @@
   "chrome_url_overrides": {
     "newtab": "popup.html"
   },
-  "applications": {
-    "gecko": {
-        "strict_min_version": "91.1.0",
-       "id": "borderify@example.com"
-    }
-},
+  
 
 "content_scripts": [
     {
