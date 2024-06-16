@@ -1,5 +1,5 @@
 class Timer {
-    constructor(minutes = 22, breakMinutes = 5) {
+    constructor(minutes = 25, breakMinutes = 5) {
         this.state = {
             running: false,
             isBreak: false,
@@ -59,7 +59,7 @@ class Timer {
         this.state.running = false;
         clearInterval(this.timerInterval);
         this.state.seconds = 0;
-        this.state.minutes = 24;
+        this.state.minutes = 25;
         this.state.isBreak = false;
         this.state.message = "Start a 25min session, reset";
         chrome.runtime.sendMessage({ action: "update", timerState: this.state });
