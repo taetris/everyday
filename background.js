@@ -43,7 +43,7 @@ class Timer {
         this.state.message = "Times up!";
 
         clearInterval(this.timerInterval);
-        chrome.runtime.sendMessage({ action: "update", timerState: this.state });
+        chrome.runtime.sendMessage({ action: "timeUp", timerState: this.state });
     }
 
     pauseTimer() {

@@ -36,9 +36,10 @@ chrome.runtime.onMessage.addListener((message) => {
         const { minutes, seconds } = message.timerState;
         timerDisplay.innerHTML = minutes.toLocaleString(undefined, { minimumIntegerDigits: 2 }) + ":" + seconds.toLocaleString(undefined, { minimumIntegerDigits: 2 });
     } else if (message.action === "timeUp") {
-        
+        alarmSound.play();
     }else if(message.action === "debug"){
         console.log("debug: ", message.timerState.running)
     }
 });
 
+// malfunctioning when multiple open tabs, maybe multiple instances running parallely
