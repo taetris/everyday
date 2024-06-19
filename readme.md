@@ -1,5 +1,7 @@
 This is a simple Firefox extension I made. Its a Pomodoro timer, that lets you interact through controls and shows up on every new tab. 
 
+![Screencastfrom11-6-240135110545-ezgif com-video-to-gif-converter](https://github.com/taetris/everyday/assets/68907534/004d1e7e-68e8-4571-bbb2-3f34241de11c)
+
 To add this extension on Firefox:
 
 1. Clone this repo.
